@@ -7,20 +7,19 @@ import Makepayment from './components/Makepayment';
 import Signin from './components/Signin';
 import SignUp from './components/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 function App() {
   return (
     <BrowserRouter>
     <div className="App">
       <header className="App-header">
-        <h1>Motorcycles!!!</h1>
+        <h1 style={{color:"red"}}>Motorcycles!!!</h1>
         <h1 className='text-warning'><marquee behavior="" direction="">Welcome to Tinkoy's Joseph online bussiness</marquee></h1>
       </header>
       <nav>
+        <Link to ='/' className='navlinks'>Home</Link>
         <Link to = '/signup' className='navlinks'>Signup</Link>
         <Link to ='/signin' className='navlinks'>signin</Link>
         <Link to ='/addproduct' className='navlinks'>Addproduct</Link>
-      
       </nav>
       <Routes>
         <Route path='/signup' element = {<SignUp />} />
