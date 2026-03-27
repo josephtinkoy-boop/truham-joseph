@@ -43,7 +43,7 @@ const Getproduct = () => {
               <h5>{product.product_name}</h5>
               <p>{product.product_description}</p>
               <p>{product.product_cost}</p>
-              <span class="badge bg-danger">New Brand</span>
+              <span class="badge bg-danger">Mordern Brand</span>
               <button className='btn btn-dark mt-2 w-100' onClick={() => navigate("/makepayment", { state: { product } })}>purchase now</button>
             </div>
           </div>
