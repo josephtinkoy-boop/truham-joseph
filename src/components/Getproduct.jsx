@@ -35,13 +35,16 @@ const Getproduct = () => {
       {error}
 
       {/* mapping the card to all the products */}
-      {products.map((product) => (
+      {products?.map((product) => (
         <div className="col-md-3 justify-content-center mb-4">
           <div className='card shadow'>
             <img src={img_url + product.product_photo} alt="" className='product_img' />
             <div className="card-body">
               <h5>{product.product_name}</h5>
-              <p>{product.product_description}</p>
+              <p>
+                {product.product_description.split(" ").slice(0, 10).join(" ")}
+                {product.product_description.split(" ").length > 10 && "..."}
+              </p>
               <p>{product.product_cost}</p>
               <span class="badge bg-danger">Mordern Brand</span>
               <button className='btn btn-dark mt-2 w-100' onClick={() => navigate("/makepayment", { state: { product } })}>purchase now</button>
