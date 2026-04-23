@@ -1,25 +1,81 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
+/* 🌈 Global Background */
 body {
-  background-color: #282c34;
-  color: white;
-  padding: 2px;
-  font-family: Arial;
-  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
 }
 
+/* 🧾 Form Card */
+.form-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 35px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* 🏷️ Titles */
+.form-container h1,
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* ✏️ Inputs */
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+/* Focus effect */
+input:focus,
+textarea:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 8px rgba(102,126,234,0.4);
+}
+
+/* 🔘 Button */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Hover effect */
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* ✂️ Product description clamp */
 .product-desc {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -27,3 +83,110 @@ body {
   overflow: hidden;
 }
 
+/* ✨ Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+.card {
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+.product-row {
+  display: flex;
+  flex-wrap: wrap;      /* allows next line if screen is small */
+  gap: 20px;
+  justify-content: center;
+}
+.dropdown-menu-custom {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: rgb(189, 207, 84);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 180px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Links */
+.dropdown-menu-custom .dropdown-item {
+  padding: 10px;
+  display: block;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+/* Hover */
+.dropdown-menu-custom .dropdown-item:hover {
+  background: #ff6600;
+  color: white;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.payment-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* CARD */
+.payment-card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+/* 🚨 FIXED IMAGE SIZE */
+.payment-img {
+  width: 100%;
+  max-width: 300px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 15px auto;
+  display: block;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}

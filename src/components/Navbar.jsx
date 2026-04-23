@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ cart = [] }) => {
-
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="navbar navbar-dark bg-success px-3">
+    <nav className="navbar navbar-dark bg-success px-3 position-relative">
 
+      {/* BRAND */}
       <Link className="navbar-brand" to="/">
         Tinkoy Shop
       </Link>
 
       <div className="ms-auto d-flex align-items-center gap-3">
 
-        {/* 🔽 DROPDOWN BUTTON */}
+        {/* DROPDOWN */}
         <div style={{ position: "relative" }}>
 
           <button
@@ -24,38 +24,23 @@ const Navbar = ({ cart = [] }) => {
             Menu ▼
           </button>
 
-          {/* DROPDOWN MENU */}
+          {/* ✅ FIX: conditional rendering properly wrapped */}
           {open && (
-            <div
-              style={{
-                position: "absolute",
-                top: "40px",
-                right: "0",
-                background: "#fff",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                zIndex: 1000,
-                minWidth: "150px"
-              }}
-            >
+            <div className="dropdown-menu-custom">
 
-              <Link onClick={() => setOpen(false)} to="/">
+              <Link onClick={() => setOpen(false)} className="dropdown-item" to="/">
                 Home
               </Link>
-              <br />
 
-              <Link onClick={() => setOpen(false)} to="/signup">
+              <Link onClick={() => setOpen(false)} className="dropdown-item" to="/signup">
                 Signup
               </Link>
-              <br />
 
-              <Link onClick={() => setOpen(false)} to="/signin">
+              <Link onClick={() => setOpen(false)} className="dropdown-item" to="/signin">
                 Signin
               </Link>
-              <br />
 
-              <Link onClick={() => setOpen(false)} to="/addproduct">
+              <Link onClick={() => setOpen(false)} className="dropdown-item" to="/addproduct">
                 Add Product
               </Link>
 
@@ -64,7 +49,7 @@ const Navbar = ({ cart = [] }) => {
 
         </div>
 
-        {/* 🛒 CART */}
+        {/* CART */}
         <span className="text-warning fw-bold">
           Cart: {cart.length}
         </span>
