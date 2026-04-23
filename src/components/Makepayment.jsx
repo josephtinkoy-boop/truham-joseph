@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios'
@@ -45,7 +46,7 @@ const Makepayment = () => {
             {message}
             {error}
             <input className='btn btn-danger' type="tel" placeholder='Enter phone 254XXX' value={phone} onChange={(e) => setPhone(e.target.value)}/><br />
-            <button type='submit' className='btn btn-info form-control '>Make payment</button>
+            <button type='submit' className='btn btn-info form-control '>Make payment</button><br />
         </form>
         </div>
     </div>

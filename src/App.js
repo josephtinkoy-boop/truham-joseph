@@ -1,20 +1,23 @@
 
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Link} from 'react-router-dom';
 import './App.css';
 import Addproduct from './components/Addproduct';
 import Getproduct from './components/Getproduct';
 import Makepayment from './components/Makepayment';
 import Signin from './components/Signin';
 import SignUp from './components/SignUp';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
 function App() {
   return (
     <BrowserRouter>
     <div className="App">
       <header className="App-header">
         <h1 style={{color:"red"}}>Motorcycles!!!</h1>
-        <h1 className='text-warning'><marquee behavior="" direction="">Welcome to Tinkoy's Joseph online bussiness</marquee></h1>
-      </header>
+<h1 className="rotate-hover-title">
+  WELCOME TO TINKOY'S JOSEPH ONLINE BUSSINESS
+</h1>   </header>
       <nav>
         <Link to ='/' className='navlinks'>Home</Link>
         <Link to = '/signup' className='navlinks'>Signup</Link>
@@ -27,15 +30,11 @@ function App() {
         <Route path='/addproduct' element ={<Addproduct />} />
         <Route path='/' element ={<Getproduct />} />
         <Route path='/makepayment' element ={<Makepayment />} />
-      
-      
-      
-      
-      
-      </Routes>
+        
+      </Routes>  
     </div>
     </BrowserRouter>
-  );
+  ); 
 }
 
 export default App;
