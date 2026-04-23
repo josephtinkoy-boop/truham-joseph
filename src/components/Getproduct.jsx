@@ -4,18 +4,15 @@ import { useNavigate } from 'react-router-dom'
 import Carousel from "./Carousel";
 import AddToCartButton from "./AddToCartButton";
 
-
-const Getproduct = () => {
+const Getproduct = ({ cart = [], setCart }) => {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState("")
   const [error, setError] = useState("")
   const [search, setSearch] = useState("")
-  const [cart, setCart] = useState([]);
 
   const img_url = "http://josephtruham.alwaysdata.net/static/images/"
   const navigate = useNavigate()
 
-  // ✅ FIXED filter (correct field)
   const filteredProducts = products.filter((product) =>
     product.product_name?.toLowerCase().includes(search.toLowerCase())
   );
@@ -24,7 +21,7 @@ const Getproduct = () => {
     setLoading("Please wait, we are retrieving the products...")
     try {
       const response = await axios.get("http://josephtruham.alwaysdata.net/api/get_product_details")
-      setProducts(response.data)
+      setProducts(response.data || []) // ✅ safety
       setLoading("")
     } catch (error) {
       setError(error.message)
@@ -39,7 +36,7 @@ const Getproduct = () => {
   return (
     <div className='row'>
 
-      {/* ✅ SEARCH INPUT */}
+      {/* SEARCH */}
       <input
         className='search-input'
         type="text"
@@ -47,26 +44,39 @@ const Getproduct = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
+
       <Carousel products={products} />
 
       <h2>Available products</h2>
+
+      {/* ✅ SAFE CART DISPLAY */}
+      <h4>Cart Items: {cart?.length || 0}</h4>
+
       {loading}
       {error}
 
-      {/* ✅ ONLY use filteredProducts */}
       {filteredProducts.map((product) => (
         <div key={product.id} className="col-md-3 mb-4">
           <div className='card shadow'>
-            <img src={img_url + product.product_photo} alt="" className='product_img' />
+            <img 
+              src={img_url + product.product_photo} 
+              alt={product.product_name} 
+              className='product_img' 
+            />
+
             <div className="card-body">
               <h5>{product.product_name}</h5>
 
+              {/* ✅ SAFE DESCRIPTION */}
               <p>
-                {product.product_description.split(" ").slice(0, 10).join(" ")}
-                {product.product_description.split(" ").length > 10 && "..."}
+                {product.product_description
+                  ? product.product_description.split(" ").slice(0, 10).join(" ")
+                  : "No description"}
+                {product.product_description &&
+                  product.product_description.split(" ").length > 10 && "..."}
               </p>
 
-              <p>{product.product_cost}</p>
+              <p>KES {product.product_cost}</p>
 
               <span className="badge bg-danger">Modern Brand</span>
 
@@ -79,7 +89,6 @@ const Getproduct = () => {
 
               <AddToCartButton
                 product={product}
-                cart={cart}
                 setCart={setCart}
               />
             </div>
@@ -87,9 +96,11 @@ const Getproduct = () => {
         </div>
       ))}
 
-      
+      {/* ✅ SAFE CART PREVIEW */}
+      <pre>{JSON.stringify(cart || [], null, 2)}</pre>
+
     </div>
   )
 }
 
-export default Getproduct
+export default Getproduct;
