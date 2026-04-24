@@ -34,14 +34,6 @@ function App() {
           </h1>
         </header>
 
-        {/* NAV LINKS (optional if navbar already handles navigation) */}
-        <nav>
-          <Link to='/' className='navlinks'>Home</Link>
-          <Link to='/signup' className='navlinks'>Signup</Link>
-          <Link to='/signin' className='navlinks'>Signin</Link>
-          <Link to='/addproduct' className='navlinks'>Add Product</Link>
-        </nav>
-
         {/* ROUTES */}
         <Routes>
 
