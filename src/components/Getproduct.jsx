@@ -21,7 +21,7 @@ const Getproduct = ({ cart = [], setCart }) => {
     setLoading("Please wait, we are retrieving the products...")
     try {
       const response = await axios.get("http://josephtruham.alwaysdata.net/api/get_product_details")
-      setProducts(response.data || []) // ✅ safety
+      setProducts(response.data || [])
       setLoading("")
     } catch (error) {
       setError(error.message)
@@ -36,7 +36,6 @@ const Getproduct = ({ cart = [], setCart }) => {
   return (
     <div className='row'>
 
-      {/* SEARCH */}
       <input
         className='search-input'
         type="text"
@@ -49,7 +48,7 @@ const Getproduct = ({ cart = [], setCart }) => {
 
       <h2>Available products</h2>
 
-      {/* ✅ SAFE CART DISPLAY */}
+      {/* OPTIONAL: keep only count */}
       <h4>Cart Items: {cart?.length || 0}</h4>
 
       {loading}
@@ -67,7 +66,6 @@ const Getproduct = ({ cart = [], setCart }) => {
             <div className="card-body">
               <h5>{product.product_name}</h5>
 
-              {/* ✅ SAFE DESCRIPTION */}
               <p>
                 {product.product_description
                   ? product.product_description.split(" ").slice(0, 10).join(" ")
@@ -95,9 +93,6 @@ const Getproduct = ({ cart = [], setCart }) => {
           </div>
         </div>
       ))}
-
-      {/* ✅ SAFE CART PREVIEW */}
-      <pre>{JSON.stringify(cart || [], null, 2)}</pre>
 
     </div>
   )

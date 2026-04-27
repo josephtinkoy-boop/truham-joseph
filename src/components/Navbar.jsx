@@ -5,7 +5,7 @@ const Navbar = ({ cart = [] }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="navbar navbar-dark bg-success px-3 position-relative">
+    <nav className="navbar navbar-dark bg-success px-3">
 
       {/* BRAND */}
       <Link className="navbar-brand" to="/">
@@ -15,8 +15,7 @@ const Navbar = ({ cart = [] }) => {
       <div className="ms-auto d-flex align-items-center gap-3">
 
         {/* DROPDOWN */}
-        <div style={{ position: "relative" }}>
-
+        <div className="dropdown-parent">
           <button
             onClick={() => setOpen(!open)}
             className="btn btn-secondary"
@@ -24,7 +23,6 @@ const Navbar = ({ cart = [] }) => {
             Menu ▼
           </button>
 
-          {/* ✅ FIX: conditional rendering properly wrapped */}
           {open && (
             <div className="dropdown-menu-custom">
 
@@ -46,7 +44,6 @@ const Navbar = ({ cart = [] }) => {
 
             </div>
           )}
-
         </div>
 
         {/* CART */}

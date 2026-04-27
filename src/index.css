@@ -9,10 +9,12 @@ body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #667eea, #764ba2);
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: #333;
+}
+
+/* OPTIONAL: wrap your whole app */
+.app-container {
+  min-height: 100vh;
 }
 
 /* 🧾 Form Card */
@@ -22,6 +24,7 @@ body {
   border-radius: 16px;
   width: 100%;
   max-width: 400px;
+  margin: 40px auto; /* ✅ center WITHOUT breaking layout */
   box-shadow: 0 15px 35px rgba(0,0,0,0.2);
   backdrop-filter: blur(10px);
   animation: fadeIn 0.5s ease-in-out;
@@ -83,7 +86,7 @@ button:hover {
   overflow: hidden;
 }
 
-/* ✨ Animation */
+/* ✨ Animation (keep ONE only) */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -94,12 +97,15 @@ button:hover {
     transform: translateY(0);
   }
 }
+
+/* 🛍️ Products */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
   padding: 20px;
 }
+
 .card {
   border: none;
   border-radius: 15px;
@@ -108,16 +114,24 @@ button:hover {
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
 }
+
 .card:hover {
   transform: translateY(-10px);
   box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
+
 .product-row {
   display: flex;
-  flex-wrap: wrap;      /* allows next line if screen is small */
+  flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
 }
+
+/* ✅ FIX: make dropdown stable */
+.dropdown-parent {
+  position: relative;
+}
+
 .dropdown-menu-custom {
   position: absolute;
   top: 45px;
@@ -133,7 +147,8 @@ button:hover {
 
 /* Links */
 .dropdown-menu-custom .dropdown-item {
-  padding: 10px;
+  padding: 12px;
+  font-size: 16px;
   display: block;
   border-radius: 8px;
   text-decoration: none;
@@ -148,17 +163,7 @@ button:hover {
   color: white;
 }
 
-/* Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* 💳 Payment Page */
 .payment-page {
   display: flex;
   justify-content: center;
@@ -168,7 +173,6 @@ button:hover {
   background: linear-gradient(135deg, #667eea, #764ba2);
 }
 
-/* CARD */
 .payment-card {
   background: white;
   padding: 25px;
@@ -179,7 +183,7 @@ button:hover {
   text-align: center;
 }
 
-/* 🚨 FIXED IMAGE SIZE */
+/* 🖼️ Image */
 .payment-img {
   width: 100%;
   max-width: 300px;
