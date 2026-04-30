@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
 
-
 const SignUp = () => {
   // adding state to all user inputs
     const[username, setUsername] = useState("")
@@ -19,7 +18,7 @@ const SignUp = () => {
     const submit = async (e) => {
         // prevent the page from reloading before the data is saved in the database
         e.preventDefault()
-        setLoading("Please wait as we uppload your data!")
+        setLoading("Please wait as we upload your data!")
         // sending user input to the database
         try {
             const data = new FormData()
@@ -47,39 +46,54 @@ const SignUp = () => {
         }
     }
     return (
-        <div className="row mt-4 justify-content-center">
-            <div className="col-md-6 card shadow p-4">
-                <h2>Sign up</h2>
-                <form action="" onSubmit={submit} className="btn btn-dark">
-                    {loading}
-                    {success}
-                    {error}
-                    <input type="text"  placeholder="Enter username" className="form-control"
-                    value = {username}
-                     onChange = {(e)=> setUsername(e.target.value)} required />
+        <div className="signup-container">
+            <div className="signup-bg">
+                <div className="signup-card">
+                    <div className="signup-header">
+                        <div className="signup-icon">🎉</div>
+                        <h2>Create Account</h2>
+                        <p>Join Tinkoy Shop today</p>
+                    </div>
                     
-                     <br />
-                    
-                    <input type="email"  placeholder="Enter Email " className="form-control" value={email}
-                    onChange={(e)=> setEmail(e.target.value)} required
-                    /> 
-                    <br />
-                   
-                    <input type="password"  placeholder="Enter password" className="form-control"  value={password} 
-                    onChange={(e)=> setPassword(e.target.value)} required/> 
-                  
-                    <br />
-                    
-                    <input type="tel"  placeholder="Enter Phone" className="form-control" value={phone} 
-                    onChange={(e)=> setPhone(e.target.value)} required />
-                    
-                     <br />
-                    
-                    <button className="btn btn-info" type="submit">
-                        Sign Up
-                    </button>
-                    <p>Already have an account? <Link to = "/signin">Sign In</Link></p>
-                </form>
+                    <form onSubmit={submit} className="signup-form">
+                        {loading && <div className="alert alert-info">⏳ {loading}</div>}
+                        {success && <div className="alert alert-success">✅ {success}</div>}
+                        {error && <div className="alert alert-danger">❌ {error}</div>}
+
+                        <div className="form-group">
+                            <label>👤 Username</label>
+                            <input type="text" placeholder="Enter username" className="form-control"
+                            value = {username}
+                             onChange = {(e)=> setUsername(e.target.value)} required />
+                        </div>
+                        
+                        <div className="form-group">
+                            <label>📧 Email</label>
+                            <input type="email" placeholder="Enter Email" className="form-control" value={email}
+                            onChange={(e)=> setEmail(e.target.value)} required />
+                        </div>
+                        
+                        <div className="form-group">
+                            <label>🔒 Password</label>
+                            <input type="password" placeholder="Enter password" className="form-control"  value={password} 
+                            onChange={(e)=> setPassword(e.target.value)} required/> 
+                        </div>
+                        
+                        <div className="form-group">
+                            <label>📱 Phone</label>
+                            <input type="tel" placeholder="Enter Phone" className="form-control" value={phone} 
+                            onChange={(e)=> setPhone(e.target.value)} required />
+                        </div>
+                        
+                        <button type="submit" className="btn btn-signup">
+                            🚀 Sign Up
+                        </button>
+                        
+                        <p className="signup-link">
+                            Already have an account? <Link to = "/signin">Sign In</Link>
+                        </p>
+                    </form>
+                </div>
             </div>
         </div>
     )

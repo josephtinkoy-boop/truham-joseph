@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-
+import { Link } from 'react-router-dom'
 
 const Addproduct = () => {
   const[product_name, setProduct_name] = useState("")
@@ -16,7 +16,7 @@ const Addproduct = () => {
       // preventing the page from reloading
       e.preventDefault()
       // uploading the loading message
-      setLoading("Please wait as we uppload your data!")
+      setLoading("⏳ Please wait as we upload your product!")
       // sending user input to the database 
       try {
         const data =new FormData()
@@ -49,26 +49,51 @@ const Addproduct = () => {
     }
 
   return (
-    <div className="row mt-4 justify-content-center">
-    <div className='col-md-6 p-4'>
-      <h2>Add Product</h2>
-      <form action="" onSubmit={submit} className='btn btn-dark'>
-        {loading}
-        {success}
-        {error}
-      <label htmlFor="">product Name</label><br />
-      <input type="text" className='form-control' value={product_name} onChange = {(e)=> setProduct_name(e.target.value)} required /><br />
-      <label htmlFor="">Description</label><br />
-      <textarea name="" id="" className='form-control' value={product_description} onChange={(e)=> setProduct_description(e.target.value)} required></textarea><br />
-       <label htmlFor="">cost(ksh)</label><br />
-       <input type="number" className='form-control' value={product_cost} onChange={(e)=> setProduct_cost(e.target.value)} required/><br />
-       <label htmlFor="">product photo</label><br />
-       <input type="file" className='form-control' onChange={(e)=> setProduct_photo(e.target.files[0])} required/><br />
-       <button type='submit' className='form-control btn btn-success'> 
-        Add Product
-       </button>
-      </form>
-    </div>
+    <div className="addproduct-container">
+        <div className="addproduct-bg">
+            <div className="addproduct-card">
+                <div className="addproduct-header">
+                    <div className="addproduct-icon">➕</div>
+                    <h2>Add New Product</h2>
+                    <p>List your product on Tinkoy Shop</p>
+                </div>
+                
+                <form onSubmit={submit} className="addproduct-form">
+                    {loading && <div className="alert alert-info">⏳ {loading}</div>}
+                    {success && <div className="alert alert-success">✅ {success}</div>}
+                    {error && <div className="alert alert-danger">❌ {error}</div>}
+
+                    <div className="form-group">
+                        <label>📦 Product Name</label>
+                        <input type="text" className='form-control' placeholder="Enter product name" value={product_name} onChange = {(e)=> setProduct_name(e.target.value)} required />
+                    </div>
+
+                    <div className="form-group">
+                        <label>📝 Description</label>
+                        <textarea name="" id="" className='form-control' placeholder="Describe your product..." value={product_description} onChange={(e)=> setProduct_description(e.target.value)} required></textarea>
+                    </div>
+
+                    <div className="form-group">
+                        <label>💰 Price (KES)</label>
+                        <input type="number" className='form-control' placeholder="Enter price in KES" value={product_cost} onChange={(e)=> setProduct_cost(e.target.value)} required/>
+                    </div>
+
+                    <div className="form-group">
+                        <label>🖼 Product Photo</label>
+                        <input type="file" className='form-control' onChange={(e)=> setProduct_photo(e.target.files[0])} required/>
+                    </div>
+
+                    <button type='submit' className='btn btn-addproduct'> 
+                        ➕ Add Product
+                    </button>
+
+                    <div className="addproduct-links">
+                        <Link to="/" className="btn btn-home">🏠 Go to Home</Link>
+                        <Link to="/dashboard" className="btn btn-dashboard">📊 Dashboard</Link>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
   )
 }

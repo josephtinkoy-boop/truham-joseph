@@ -3,47 +3,48 @@ import React from "react";
 const AddToCartButton = ({ product, setCart }) => {
 
   const addToCart = () => {
-    if (typeof setCart !== "function") {
-      console.error("setCart is not a function. Check props passed from parent.");
-      return;
-    }
+    if (typeof setCart !== "function") return;
+    if (!product) return;
 
-    if (!product) {
-      console.error("Invalid product:", product);
-      return;
-    }
-
-    // ✅ normalize id (handles both id formats)
-    const productId = product.product_id || product.id;
-
-    if (!productId) {
-      console.error("Product missing ID:", product);
-      return;
-    }
+    const productId = product.id || product.product_id;
 
     setCart((prevCart) => {
-      const exists = prevCart.find(
-        (item) => (item.product_id || item.id) === productId
+      const cart = Array.isArray(prevCart) ? prevCart : [];
+
+      const exists = cart.find(
+        (item) => (item.id || item.product_id) === productId
       );
 
+      // 🔁 If already exists, increase quantity
       if (exists) {
-        return prevCart.map((item) =>
-          (item.product_id || item.id) === productId
+        return cart.map((item) =>
+          (item.id || item.product_id) === productId
             ? { ...item, qty: (item.qty || 1) + 1 }
             : item
         );
       }
 
+      // 🆕 NEW ITEM (THIS IS THE IMPORTANT FIX)
       return [
-        ...prevCart,
-        { ...product, product_id: productId, qty: 1 }
+        ...cart,
+        {
+          id: productId,
+          product_id: productId,
+          name: product.product_name || product.name,
+          price: Number(product.product_cost || product.price || 0),
+
+          // ⭐ THIS FIXES YOUR IMAGE PROBLEM
+          product_photo: product.product_photo,
+
+          qty: 1
+        }
       ];
     });
   };
 
   return (
     <button
-      className="btn btn-warning mt-2 w-100"
+      className="btn btn-warning w-100 mt-2"
       onClick={addToCart}
       disabled={!product}
     >

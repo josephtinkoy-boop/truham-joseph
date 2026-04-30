@@ -9,26 +9,45 @@ function Carousel() {
     <div className="container-fluid p-0 mb-4">
       <div
         id="heroCarousel"
-        className="carousel slide"
+        className="carousel slide carousel-fade"
         data-bs-ride="carousel"
-        data-bs-interval="2000"
+        data-bs-interval="3000"
       >
+        <div className="carousel-indicators">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              data-bs-target="#heroCarousel"
+              data-bs-slide-to={i}
+              className={i === 0 ? "active" : ""}
+              aria-current={i === 0 ? "true" : "false"}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
+
         <div className="carousel-inner">
 
           {slides.map((img, i) => (
             <div
               key={i}
               className={`carousel-item ${i === 0 ? "active" : ""}`}
+              data-bs-interval="3000"
             >
               <img
                 src={img}
                 className="d-block w-100"
-                alt={`slide-${i}`}
+                alt={`Slide ${i + 1}`}
                 style={{
-                  height: "400px",
+                  height: "450px",
                   objectFit: "cover"
                 }}
               />
+              <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                <h5>Welcome to Tinkoy Shop</h5>
+                <p>Discover amazing products at great prices!</p>
+              </div>
             </div>
           ))}
 
@@ -40,7 +59,8 @@ function Carousel() {
           data-bs-target="#heroCarousel"
           data-bs-slide="prev"
         >
-          <span className="carousel-control-prev-icon" />
+          <span className="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true" />
+          <span className="visually-hidden">Previous</span>
         </button>
 
         <button
@@ -49,7 +69,8 @@ function Carousel() {
           data-bs-target="#heroCarousel"
           data-bs-slide="next"
         >
-          <span className="carousel-control-next-icon" />
+          <span className="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true" />
+          <span className="visually-hidden">Next</span>
         </button>
 
       </div>

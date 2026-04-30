@@ -15,7 +15,7 @@ const Signin = () => {
     // preventing the default behavior of the form from reloading
     e.preventDefault()
     // uploading the loading message
-    setLoading("please wait as we log you in")
+    setLoading("Please wait as we log you in...")
     try {
       // adding user input to data variables
     const data = new FormData ()
@@ -40,25 +40,44 @@ const Signin = () => {
       //updating loading message to empty
       setLoading("")
       // update the error
-      setError(error.response.data.message) 
+      setError(error.response?.data?.message || error.message) 
     }
   }
 
   return (
-    <div className="row mt-4 justify-content-center">
-    <div className="col-md-6 card shadow p-4">
-      <h2>sign in</h2>
-      <form action="" onSubmit={submit} className='btn btn-dark'>
-        {loading}
-        {error}
-        <input type="email" placeholder='Email' className='form-control' value={email}  onChange = {(e)=> setEmail(e.target.value)} required/><br />
-        <input type="password" placeholder='Password'className='form-control' value={password}  onChange = {(e)=> setPassword(e.target.value)} required/><br />
-        <button type='submit' className="btn btn-success form-control">
-          sign in
-        </button>
-        <p>Don't have an account?<Link to = "/signup">Sign up</Link></p>
-      </form>
-    </div>
+    <div className="signin-container">
+        <div className="signin-bg">
+            <div className="signin-card">
+                <div className="signin-header">
+                    <div className="signin-icon">🔐</div>
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to your account</p>
+                </div>
+                
+                <form onSubmit={submit} className="signin-form">
+                    {loading && <div className="alert alert-info">⏳ {loading}</div>}
+                    {error && <div className="alert alert-danger">❌ {error}</div>}
+
+                    <div className="form-group">
+                        <label>📧 Email</label>
+                        <input type="email" placeholder='Enter your email' className='form-control' value={email}  onChange = {(e)=> setEmail(e.target.value)} required/>
+                    </div>
+
+                    <div className="form-group">
+                        <label>🔒 Password</label>
+                        <input type="password" placeholder='Enter your password'className='form-control' value={password}  onChange = {(e)=> setPassword(e.target.value)} required/>
+                    </div>
+
+                    <button type='submit' className="btn btn-signin">
+                        🚪 Sign In
+                    </button>
+
+                    <p className="signin-link">
+                        Don't have an account?<Link to = "/signup"> Sign up</Link>
+                    </p>
+                </form>
+            </div>
+        </div>
     </div>
   )
 }
