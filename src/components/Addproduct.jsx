@@ -3,18 +3,25 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 
 const Addproduct = () => {
-  const[product_name, setProduct_name] = useState("")
-  const[product_description, setProduct_description] = useState("")
-  const[product_cost, setProduct_cost] = useState("")
-  const[product_photo,setProduct_photo] = useState("")
+  const [product_name, setProduct_name] = useState("")
+  const [product_description, setProduct_description] = useState("")
+  const [product_cost, setProduct_cost] = useState("")
+  const [product_photo,setProduct_photo] = useState("")
   // set states for success,error and loading
-    const [loading, setLoading] = useState("")
-    const [success, setSuccess] = useState("")
-    const [error, setError] = useState("")
-    //function to post the user input to the database
+  const [loading, setLoading] = useState("")
+  const [success, setSuccess] = useState("")
+  const [error, setError] = useState("")
+
+  // Function to post the user input to the database
     const submit = async (e) => {
       // preventing the page from reloading
       e.preventDefault()
+      
+      // Check user role before submission
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      console.log("Submit - User object:", user);
+      console.log("Submit - User role:", user?.role);
+      
       // uploading the loading message
       setLoading("⏳ Please wait as we upload your product!")
       // sending user input to the database 
@@ -27,7 +34,7 @@ const Addproduct = () => {
         data.append("product_photo", product_photo)
 
         // using axios to post our data to the database
-            const response = await axios.post ("https://josephtruham.alwaysdata.net/api/add_product", data)
+            const response = await axios.post ("http://josephtruham.alwaysdata.net/api/add_product", data)
             console.log(response)
             // removing the loading message by setting it to empty
             setLoading("")
@@ -88,8 +95,8 @@ const Addproduct = () => {
                     </button>
 
                     <div className="addproduct-links">
+                        <Link to="/admin" className="btn btn-dashboard">🏠 Back to Admin Dashboard</Link>
                         <Link to="/" className="btn btn-home">🏠 Go to Home</Link>
-                        <Link to="/dashboard" className="btn btn-dashboard">📊 Dashboard</Link>
                     </div>
                 </form>
             </div>

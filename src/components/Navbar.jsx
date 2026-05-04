@@ -1,11 +1,23 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = ({ cart }) => {
-
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user") || "null"));
+  const location = useLocation();
 
-  // ✅ SAFE CART FALLBACK
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user") || "null"));
+  }, [location]);
+
+  const roleText = user?.role?.toString?.()?.toLowerCase?.() || "";
+  const isAdmin = Boolean(
+    roleText.includes("admin") ||
+    user?.admin === true ||
+    user?.isAdmin === true ||
+    user?.role === 1 ||
+    user?.role === "1"
+  );
   const safeCart = Array.isArray(cart) ? cart : [];
 
   return (
@@ -25,6 +37,16 @@ const Navbar = ({ cart }) => {
         >
           🛒 Cart: {safeCart.length}
         </Link>
+
+        {isAdmin && (
+          <Link
+            to="/admin"
+            className="text-white fw-bold text-decoration-none"
+            style={{ marginRight: "12px" }}
+          >
+            🛠️ Admin Panel
+          </Link>
+        )}
 
         {/* MENU */}
         <div className="position-relative">
@@ -78,7 +100,14 @@ const Navbar = ({ cart }) => {
               <Link onClick={() => setOpen(false)} className="dropdown-item d-block py-2 px-3 rounded" to="/chart" style={{ fontSize: "15px", color: "#fff", backgroundColor: "#fd7e14" }}>
                 📈 Chart
               </Link>
-
+              {isAdmin && (
+                <>
+                  <hr className="border-warning" />
+                  <Link onClick={() => setOpen(false)} className="dropdown-item d-block py-2 px-3 rounded mb-1" to="/admin" style={{ fontSize: "15px", color: "#fff", backgroundColor: "#d63384" }}>
+                    🛠️ Admin Panel
+                  </Link>
+                </>
+              )}
             </div>
           )}
 

@@ -2,6 +2,21 @@ import React, { useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// Country data with flags and phone codes
+const COUNTRIES = [
+  { code: "KE", name: "Kenya", flag: "🇰🇪", dialCode: "254", length: 12 },
+  { code: "UG", name: "Uganda", flag: "🇺🇬", dialCode: "256", length: 12 },
+  { code: "TZ", name: "Tanzania", flag: "🇹🇿", dialCode: "255", length: 12 },
+  { code: "NG", name: "Nigeria", flag: "🇳🇬", dialCode: "234", length: 13 },
+  { code: "GH", name: "Ghana", flag: "🇬🇭", dialCode: "233", length: 12 },
+  { code: "ZA", name: "South Africa", flag: "🇿🇦", dialCode: "27", length: 11 },
+  { code: "ET", name: "Ethiopia", flag: "🇪🇹", dialCode: "251", length: 12 },
+  { code: "EG", name: "Egypt", flag: "🇪🇬", dialCode: "20", length: 11 },
+  { code: "RW", name: "Rwanda", flag: "🇷🇼", dialCode: "250", length: 12 },
+  { code: "GB", name: "United Kingdom", flag: "🇬🇧", dialCode: "44", length: 12 },
+  { code: "US", name: "United States", flag: "🇺🇸", dialCode: "1", length: 11 },
+];
+
 const Makepayment = ({ setOrders }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,6 +44,78 @@ const Makepayment = ({ setOrders }) => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]); // Default Kenya
+
+  // Detect country from phone number
+  const detectCountry = (phoneNumber) => {
+    if (!phoneNumber) return COUNTRIES[0];
+    
+    const cleaned = phoneNumber.replace(/\D/g, "");
+    
+    // Check for known country codes
+    for (const country of COUNTRIES) {
+      if (cleaned.startsWith(country.dialCode)) {
+        return country;
+      }
+      // Also check with leading zero
+      if (cleaned.startsWith("0" + country.dialCode.slice(1))) {
+        return country;
+      }
+    }
+    
+    // Default to Kenya for local numbers
+    if (cleaned.startsWith("7") || cleaned.startsWith("1")) {
+      return COUNTRIES[0];
+    }
+    
+    return COUNTRIES[0];
+  };
+
+  // Format phone number
+  const formatPhone = (value) => {
+    const cleaned = value.replace(/\D/g, "");
+    const dialCode = selectedCountry.dialCode;
+    
+    if (cleaned.startsWith(dialCode)) {
+      return cleaned;
+    }
+    
+    // Remove leading zero if present
+    const withoutZero = cleaned.startsWith("0") ? cleaned.slice(1) : cleaned;
+    
+    return dialCode + withoutZero;
+  };
+
+  // Validate phone number
+  const validatePhone = (phoneNumber) => {
+    const cleaned = phoneNumber.replace(/\D/g, "");
+    const expectedLength = selectedCountry.length;
+    
+    if (cleaned.length < expectedLength - 3) {
+      return { valid: false, message: `Phone too short. Expected ${expectedLength} digits.` };
+    }
+    
+    if (cleaned.length > expectedLength) {
+      return { valid: false, message: `Phone too long. Maximum ${expectedLength} digits.` };
+    }
+    
+    // Check if starts with correct country code
+    const dialCode = selectedCountry.dialCode;
+    if (!cleaned.startsWith(dialCode) && !cleaned.startsWith("0" + dialCode.slice(1))) {
+      return { valid: false, message: `Phone number must start with ${selectedCountry.flag} ${selectedCountry.dialCode}` };
+    }
+    
+    return { valid: true, message: "Valid phone number" };
+  };
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    setPhone(value);
+    
+    // Auto-detect country
+    const detected = detectCountry(value);
+    setSelectedCountry(detected);
+  };
 
   // 🚨 SAFE GUARD
   if (!items || items.length === 0) {
@@ -156,14 +243,48 @@ const Makepayment = ({ setOrders }) => {
 
                     <div className="form-group">
                         <label>📱 M-Pesa Phone Number</label>
-                        <input
-                            type="tel"
-                            placeholder="e.g. 2547XXXXXXXX"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="form-control"
-                            required
-                        />
+                        <div className="phone-input-container">
+                            <div className="country-selector">
+                                <span className="country-flag">{selectedCountry.flag}</span>
+                                <select 
+                                    className="form-select"
+                                    value={selectedCountry.code}
+                                    onChange={(e) => {
+                                        const country = COUNTRIES.find(c => c.code === e.target.value);
+                                        setSelectedCountry(country);
+                                        setPhone(country.dialCode);
+                                    }}
+                                >
+                                    {COUNTRIES.map(country => (
+                                        <option key={country.code} value={country.code}>
+                                            {country.flag} {country.name} (+{country.dialCode})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="phone-input-wrapper">
+                                <input
+                                    type="tel"
+                                    placeholder={`e.g. ${selectedCountry.dialCode}7XXXXXXXX`}
+                                    value={phone}
+                                    onChange={handlePhoneChange}
+                                    className="form-control phone-input"
+                                    required
+                                />
+                                {phone && (
+                                    <div className="phone-validation">
+                                        {(() => {
+                                            const validation = validatePhone(phone);
+                                            return validation.valid ? (
+                                                <span className="valid-phone">✅ {validation.message}</span>
+                                            ) : (
+                                                <span className="invalid-phone">❌ {validation.message}</span>
+                                            );
+                                        })()}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                         <small>We'll send an STK push to this number</small>
                     </div>
 

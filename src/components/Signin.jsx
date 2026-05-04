@@ -22,15 +22,24 @@ const Signin = () => {
     data.append("email", email)
     data.append("password", password)
     // connecting and posting data to the database
-    const response = await axios.post("http://josephtruham.Alwaysdata.net/api/signin", data)
+    const response = await axios.post("http://josephtruham.alwaysdata.net/api/signin", data)
     // updating the loading message to empty
     setLoading("")
     // checking if a user exist
     if (response.data.user){
       // storing the user in the browser local storage
       localStorage.setItem("user", JSON.stringify(response.data.user))
+      console.log("User logged in:", response.data.user)
+      console.log("User role:", response.data.user.role)
       // redirecting the logged user to landing page
-      navigate('/')
+      // Check if user is admin
+      if (response.data.user.role === "admin") {
+        console.log("Redirecting to admin page")
+        navigate('/admin')
+      } else {
+        console.log("Redirecting to home page")
+        navigate('/')
+      }
     }
     else{
       // error for login fail

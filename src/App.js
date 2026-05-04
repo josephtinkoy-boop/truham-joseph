@@ -14,6 +14,8 @@ import Orders from "./components/Orders";
 import Dashboard from "./components/Dashboard";
 import Chart from "./components/Chart";
 import ChatBox from "./components/ChatBox";
+import Admin from "./components/Admin";
+import RequireAuth from "./components/RequireAuth";
 
 import { useState } from "react";
 
@@ -57,7 +59,7 @@ function App() {
           <Route path="/signin" element={<Signin />} />
 
           {/* PRODUCTS */}
-          <Route path="/addproduct" element={<Addproduct />} />
+          <Route path="/addproduct" element={<RequireAuth><Addproduct /></RequireAuth>} />
 
           {/* CART */}
           <Route
@@ -97,6 +99,12 @@ function App() {
           <Route
             path="/chat"
             element={<ChatBox user="Seller" />}
+          />
+
+          {/* ADMIN - Protected admin-only access */}
+          <Route
+            path="/admin"
+            element={<Admin />}
           />
 
         </Routes>
