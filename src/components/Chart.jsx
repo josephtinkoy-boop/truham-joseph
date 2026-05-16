@@ -39,7 +39,6 @@ const generateAIResponse = (question, chartData) => {
   
   const questionLower = question.toLowerCase();
   
-  // Calculate basic statistics
   const sum = data.reduce((a, b) => a + b, 0);
   const avg = (sum / data.length).toFixed(2);
   const max = Math.max(...data);
@@ -78,7 +77,6 @@ const generateAIResponse = (question, chartData) => {
     return `Here's a comparison: Highest (KES ${max}) is ${(max / min).toFixed(1)}x the lowest (KES ${min}). The range spans KES ${max - min}.`;
   }
   
-  // Default responses
   const responses = [
     `I can see your chart has ${data.length} data points across ${labels.join(', ')}. The values range from KES ${min} to KES ${max}. Would you like me to analyze specific aspects like trends, peaks, or averages?`,
     `This chart shows ${datasets[0]?.label || 'data'} with values: ${data.join(', ')}. What specific insight would you like about this data?`,
@@ -95,12 +93,10 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   
-  // Generate chart data from orders
   const chartData = useMemo(() => {
     const safeOrders = Array.isArray(orders) ? orders : [];
     
     if (safeOrders.length === 0) {
-      // Default sample data when no orders
       return {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
         datasets: [
@@ -114,14 +110,12 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
       };
     }
     
-    // Group orders by product name for pie chart
     const productTotals = {};
     safeOrders.forEach(order => {
       const name = order.name || 'Unknown';
       productTotals[name] = (productTotals[name] || 0) + (order.total || 0);
     });
     
-    // Use last 6 orders for line/bar charts
     const recentOrders = safeOrders.slice(-6);
     
     return {
@@ -152,9 +146,7 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'top',
-      },
+      legend: { position: 'top' },
       title: {
         display: true,
         text: title,
@@ -166,10 +158,16 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
   const renderChart = () => {
     const dataToUse = chartType === 'pie' 
       ? { 
-          labels: chartData.productLabels.length > 0 ? chartData.productLabels : chartData.labels,
+          labels: (chartData.productLabels || []).length > 0 
+            ? chartData.productLabels 
+            : (chartData.labels || []),
+
           datasets: [{
             label: 'Sales by Product (KES)',
-            data: chartData.productData.length > 0 ? chartData.productData : chartData.datasets[0].data,
+            data: (chartData.productData || []).length > 0 
+              ? chartData.productData 
+              : (chartData.datasets?.[0]?.data || []),
+
             backgroundColor: [
               'rgba(255, 99, 132, 0.5)',
               'rgba(54, 162, 235, 0.5)',
@@ -210,7 +208,6 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
     setInput('');
     setIsTyping(true);
     
-    // Simulate AI thinking delay
     setTimeout(() => {
       const aiResponse = generateAIResponse(input, chartData);
       setMessages(prev => [...prev, { role: 'ai', text: aiResponse }]);
@@ -237,27 +234,14 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
         </div>
 
         <div className="chart-card">
-          {/* Chart Type Buttons */}
           <div className="chart-type-buttons">
-            <button
-              type="button"
-              className={`btn-chart-type ${chartType === 'line' ? 'active' : ''}`}
-              onClick={() => setChartType('line')}
-            >
+            <button type="button" className={`btn-chart-type ${chartType === 'line' ? 'active' : ''}`} onClick={() => setChartType('line')}>
               📈 Line
             </button>
-            <button
-              type="button"
-              className={`btn-chart-type ${chartType === 'bar' ? 'active' : ''}`}
-              onClick={() => setChartType('bar')}
-            >
+            <button type="button" className={`btn-chart-type ${chartType === 'bar' ? 'active' : ''}`} onClick={() => setChartType('bar')}>
               📊 Bar
             </button>
-            <button
-              type="button"
-              className={`btn-chart-type ${chartType === 'pie' ? 'active' : ''}`}
-              onClick={() => setChartType('pie')}
-            >
+            <button type="button" className={`btn-chart-type ${chartType === 'pie' ? 'active' : ''}`} onClick={() => setChartType('pie')}>
               🥧 Pie
             </button>
           </div>
@@ -267,20 +251,15 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
           </div>
         </div>
         
-        {/* AI Chat Interface */}
         <div className="chart-ai-section">
           <div className="ai-header">
             <span className="ai-icon">🤖</span>
             <strong>Chart AI Assistant</strong>
           </div>
           
-          {/* Chat Messages */}
           <div className="chat-messages">
             {messages.map((msg, index) => (
-              <div 
-                key={index} 
-                className={`chat-message ${msg.role}`}
-              >
+              <div key={index} className={`chat-message ${msg.role}`}>
                 {msg.role === 'ai' && <span className="msg-icon">🤖</span>}
                 <span className="msg-text">{msg.text}</span>
               </div>
@@ -293,7 +272,6 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
             )}
           </div>
           
-          {/* Input Field */}
           <div className="chat-input-area">
             <input
               type="text"
@@ -303,10 +281,7 @@ function Chart({ type: initialType = 'bar', orders = [], title = 'Sales Analytic
               placeholder="Ask about your sales data..."
               className="chat-input"
             />
-            <button
-              onClick={handleSend}
-              className="btn-send"
-            >
+            <button onClick={handleSend} className="btn-send">
               Send
             </button>
           </div>

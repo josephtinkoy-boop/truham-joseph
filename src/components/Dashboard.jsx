@@ -1,24 +1,69 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function Dashboard({ orders = [] }) {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const safeOrders = Array.isArray(orders) ? orders : [];
 
-  // 💰 Safe revenue calculation
-  const totalRevenue = orders.reduce(
-    (sum, order) => sum + (order.total || 0),
+  const totalRevenue = safeOrders.reduce((sum, order) => sum + (order.total || 0), 0);
+  const totalItems = safeOrders.reduce(
+    (sum, order) => sum + (order.items ? order.items.length : order.qty || 1),
     0
   );
+  const avgOrderValue = safeOrders.length > 0 ? (totalRevenue / safeOrders.length).toFixed(2) : 0;
+  const recentOrders = safeOrders.slice(-5).reverse();
 
-  // 📦 Safe item count
-  const totalItems = orders.reduce(
-    (sum, order) => sum + (order.items ? order.items.length : 0),
-    0
-  );
+  const chartData = useMemo(() => {
+    const recent = safeOrders.slice(-6);
+    return {
+      labels: recent.map((order, index) => `Order ${index + 1}`),
+      datasets: [
+        {
+          label: "Revenue per Order (KES)",
+          data: recent.map((order) => order.total || 0),
+          borderColor: "rgb(102, 126, 234)",
+          backgroundColor: "rgba(102, 126, 234, 0.3)",
+          tension: 0.3,
+          fill: true,
+        },
+      ],
+    };
+  }, [safeOrders]);
 
-  // 📊 Calculate average order value
-  const avgOrderValue = orders.length > 0 
-    ? (totalRevenue / orders.length).toFixed(2) 
-    : 0;
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Recent Revenue Trend",
+        font: { size: 18 },
+      },
+    },
+    scales: {
+      y: {
+        ticks: {
+          callback: (value) => `KES ${value}`,
+        },
+      },
+    },
+  };
 
   return (
     <div className="dashboard-container">
@@ -32,7 +77,7 @@ function Dashboard({ orders = [] }) {
           </Link>
         </div>
 
-        {orders.length === 0 ? (
+        {safeOrders.length === 0 ? (
           <div className="dashboard-empty">
             <div className="empty-icon">📊</div>
             <h3>No data available yet</h3>
@@ -49,7 +94,7 @@ function Dashboard({ orders = [] }) {
                 <div className="stat-icon">📦</div>
                 <div className="stat-content">
                   <h5>Total Orders</h5>
-                  <p className="stat-value">{orders.length}</p>
+                  <p className="stat-value">{safeOrders.length}</p>
                 </div>
               </div>
 
@@ -78,35 +123,67 @@ function Dashboard({ orders = [] }) {
               </div>
             </div>
 
-            {/* RECENT ORDERS TABLE */}
-            <div className="recent-orders">
-              <h4>Recent Orders</h4>
-              <div className="table-responsive">
-                <table className="orders-table">
-                  <thead>
-                    <tr>
-                      <th>Order #</th>
-                      <th>Product</th>
-                      <th>Price</th>
-                      <th>Qty</th>
-                      <th>Total</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orders.slice(-5).reverse().map((order, index) => (
-                      <tr key={order?.id || index}>
-                        <td>#{index + 1}</td>
-                        <td>{order?.name || "Unknown"}</td>
-                        <td>KES {order?.price || 0}</td>
-                        <td>{order?.qty || 1}</td>
-                        <td className="fw-bold">KES {order?.total || 0}</td>
-                        <td>{order?.date || "N/A"}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            <div className="dashboard-chart-section">
+              <div className="section-header">
+                <div>
+                  <h3>Revenue Chart</h3>
+                  <p>Visualize revenue from the most recent orders.</p>
+                </div>
+                <div className="dashboard-chart-links">
+                  <Link to="/chart" className="btn btn-view-chart">
+                    📈 Full Analytics
+                  </Link>
+                  <Link to="/orders" className="btn btn-start-shopping">
+                    📦 View All Orders
+                  </Link>
+                </div>
               </div>
+
+              <div className="chart-box">
+                <Line data={chartData} options={chartOptions} />
+              </div>
+            </div>
+
+            <div className="dashboard-orders-section">
+              <div className="section-header">
+                <div>
+                  <h3>Recent Orders</h3>
+                  <p>Latest sales and order details at a glance.</p>
+                </div>
+              </div>
+
+              {recentOrders.length === 0 ? (
+                <div className="dashboard-empty">
+                  <div className="empty-icon">📦</div>
+                  <h3>No orders yet</h3>
+                  <p>Complete a sale to populate the dashboard.</p>
+                  <Link to="/" className="btn btn-start-shopping">
+                    🛍 Start Selling
+                  </Link>
+                </div>
+              ) : (
+                <div className="orders-grid">
+                  {recentOrders.map((order, index) => (
+                    <div key={order?.id || index} className="order-card">
+                      <div className="order-header">
+                        <h5 className="order-number">Order #{index + 1}</h5>
+                        <span className="order-status">✅ Completed</span>
+                      </div>
+
+                      <div className="order-date">📅 {order?.date || "Unknown date"}</div>
+                      <hr />
+                      <div className="order-content">
+                        <div className="order-details">
+                          <p className="product-name"><strong>Product:</strong> {order?.name || "Unknown"}</p>
+                          <p className="product-price"><strong>Price:</strong> KES {order?.price || 0}</p>
+                          <p className="product-qty"><strong>Qty:</strong> {order?.qty || 1}</p>
+                          <p className="product-total"><strong>Total:</strong> KES {order?.total || 0}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </>
         )}

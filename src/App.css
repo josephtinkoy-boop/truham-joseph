@@ -132,14 +132,14 @@
 }
 
 .App-header {
-  background-color: #62b7c2;
+  background-color: #7262c2;
   min-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(255, 255, 255);
 }
 .header:hover {
   transform: scale(1.05);
@@ -149,7 +149,7 @@
   text-align: center;
   font-size: 2.5rem;
   font-weight: bold;
-  color: #ffcc00;
+  color: #2508b8;
 
   display: inline-block;
 
@@ -274,7 +274,7 @@
 }
 
 .signup-card {
-  background: white;
+  background: hsl(309, 21%, 94%);
   border-radius: 20px;
   padding: 40px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -378,7 +378,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
   padding: 20px;
 }
 
@@ -450,7 +449,7 @@
 .btn-signin {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  background: linear-gradient(135deg, #11998e 0%, #a608e5 100%);
   color: white;
   border: none;
   border-radius: 10px;
@@ -490,7 +489,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   padding: 20px;
 }
 
@@ -565,7 +563,7 @@
 .btn-addproduct {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #90319d 0%, #8495ef 100%);
   color: white;
   border: none;
   border-radius: 10px;
@@ -626,7 +624,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+
   padding: 20px;
 }
 
@@ -884,7 +882,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   padding: 20px;
 }
 
@@ -1091,7 +1088,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
   padding: 20px;
 }
 
@@ -1138,6 +1134,88 @@
 .btn-view-chart:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.dashboard-chart-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.admin-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.admin-chip {
+  background: rgba(255, 255, 255, 0.88);
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-chart-section,
+.dashboard-orders-section {
+  margin-bottom: 30px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.section-header h3 {
+  color: #333;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.section-header p {
+  color: #666;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.chart-box {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  min-height: 320px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.order-content {
+  display: block;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 992px) {
+  .orders-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Empty Dashboard */
@@ -1276,7 +1354,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
   padding: 20px;
 }
 
@@ -1484,7 +1561,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
   padding: 20px;
 }
 

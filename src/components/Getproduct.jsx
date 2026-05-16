@@ -13,6 +13,8 @@ const Getproduct = ({ cart = [], setCart }) => {
   const img_url = "http://josephtruham.alwaysdata.net/static/images/"
   const navigate = useNavigate()
 
+  const user = JSON.parse(localStorage.getItem("user")); // ✅ ADDED
+
   const filteredProducts = products.filter((product) =>
     product.product_name?.toLowerCase().includes(search.toLowerCase())
   );
@@ -35,6 +37,7 @@ const Getproduct = ({ cart = [], setCart }) => {
 
   return (
     <div className="container-fluid px-4">
+
       {/* Search Bar */}
       <div className="row mb-4">
         <div className="col-12">
@@ -59,19 +62,24 @@ const Getproduct = ({ cart = [], setCart }) => {
       {loading}
       {error}
 
-      {/* Products Grid - 4 per row on desktop */}
+      {/* Products Grid */}
       <div className="row g-4">
         {filteredProducts.map((product) => (
           <div key={product.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
+
             <div className="card shadow h-100">
-              <img 
-                src={img_url + product.product_photo} 
-                alt={product.product_name} 
-                className="product-img" 
+
+              <img
+                src={img_url + product.product_photo}
+                alt={product.product_name}
+                className="product-img"
               />
 
               <div className="card-body d-flex flex-column">
-                <h5 className="card-title">{product.product_name}</h5>
+
+                <h5 className="card-title">
+                  {product.product_name}
+                </h5>
 
                 <p className="card-text small text-muted">
                   {product.product_description
@@ -81,14 +89,29 @@ const Getproduct = ({ cart = [], setCart }) => {
                     product.product_description.split(" ").length > 10 && "..."}
                 </p>
 
-                <p className="fw-bold text-success h5">KES {product.product_cost}</p>
+                <p className="fw-bold text-success h5">
+                  KES {product.product_cost}
+                </p>
 
-                <span className="badge bg-danger mb-2">Modern Brand</span>
+                <span className="badge bg-danger mb-2">
+                  Modern Brand
+                </span>
 
                 <div className="mt-auto">
+
+                  {/* 🔥 FIX: PROTECT PURCHASE BUTTON */}
                   <button
                     className="btn btn-dark w-100 mb-2"
-                    onClick={() => navigate("/makepayment", { state: { product } })}
+                    onClick={() => {
+                      if (!user) {
+                        navigate("/signin");
+                        return;
+                      }
+
+                      navigate("/makepayment", {
+                        state: { product }
+                      });
+                    }}
                   >
                     Purchase now
                   </button>
@@ -97,6 +120,7 @@ const Getproduct = ({ cart = [], setCart }) => {
                     product={product}
                     setCart={setCart}
                   />
+
                 </div>
               </div>
             </div>
@@ -110,6 +134,7 @@ const Getproduct = ({ cart = [], setCart }) => {
           <h4 className="text-muted">No products found</h4>
         </div>
       )}
+
     </div>
   )
 }

@@ -21,7 +21,7 @@ const Navbar = ({ cart }) => {
   const safeCart = Array.isArray(cart) ? cart : [];
 
   return (
-    <nav className="navbar navbar-dark bg-success px-3">
+    <nav className="navbar navbar-dark bg-primary px-3">
 
       {/* BRAND */}
       <Link className="navbar-brand" to="/">
@@ -40,7 +40,7 @@ const Navbar = ({ cart }) => {
 
         {isAdmin && (
           <Link
-            to="/admin"
+            to="/dashboard"
             className="text-white fw-bold text-decoration-none"
             style={{ marginRight: "12px" }}
           >
@@ -103,7 +103,7 @@ const Navbar = ({ cart }) => {
               {isAdmin && (
                 <>
                   <hr className="border-warning" />
-                  <Link onClick={() => setOpen(false)} className="dropdown-item d-block py-2 px-3 rounded mb-1" to="/admin" style={{ fontSize: "15px", color: "#fff", backgroundColor: "#d63384" }}>
+                  <Link onClick={() => setOpen(false)} className="dropdown-item d-block py-2 px-3 rounded mb-1" to="/dashboard" style={{ fontSize: "15px", color: "#fff", backgroundColor: "#d63384" }}>
                     🛠️ Admin Panel
                   </Link>
                 </>

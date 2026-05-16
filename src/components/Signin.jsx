@@ -1,55 +1,57 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useState } from "react"
 import axios from 'axios'
 
 const Signin = () => {
-  // adding state to all user inputs
-    const[email, setEmail] = useState("")
-    const[password,setPassword] = useState("")
-    const[loading, setLoading] = useState("")
-    const[error, setError] = useState("")
-    const navigate = useNavigate()
-  //  function to submit data to the database
+  const[email, setEmail] = useState("")
+  const[password,setPassword] = useState("")
+  const[loading, setLoading] = useState("")
+  const[error, setError] = useState("")
+  const navigate = useNavigate()
+
+  // 🔐 FIX ADDED: remember where user came from
+  const location = useLocation()
+  const from = location.state?.from?.pathname || "/"
+
   const submit = async (e) => {
-    // preventing the default behavior of the form from reloading
     e.preventDefault()
-    // uploading the loading message
     setLoading("Please wait as we log you in...")
+
     try {
-      // adding user input to data variables
-    const data = new FormData ()
-    data.append("email", email)
-    data.append("password", password)
-    // connecting and posting data to the database
-    const response = await axios.post("http://josephtruham.alwaysdata.net/api/signin", data)
-    // updating the loading message to empty
-    setLoading("")
-    // checking if a user exist
-    if (response.data.user){
-      // storing the user in the browser local storage
-      localStorage.setItem("user", JSON.stringify(response.data.user))
-      console.log("User logged in:", response.data.user)
-      console.log("User role:", response.data.user.role)
-      // redirecting the logged user to landing page
-      // Check if user is admin
-      if (response.data.user.role === "admin") {
-        console.log("Redirecting to admin page")
-        navigate('/admin')
-      } else {
-        console.log("Redirecting to home page")
-        navigate('/')
-      }
-    }
-    else{
-      // error for login fail
-      setError(response.data.message)
-    }
-    } catch (error) {
-      //updating loading message to empty
+      const data = new FormData()
+      data.append("email", email)
+      data.append("password", password)
+
+      const response = await axios.post(
+        "http://josephtruham.alwaysdata.net/api/signin",
+        data
+      )
+
       setLoading("")
-      // update the error
-      setError(error.response?.data?.message || error.message) 
+
+      if (response.data.user) {
+
+        localStorage.setItem("user", JSON.stringify(response.data.user))
+        localStorage.setItem("token", response.data.token || "logged-in")
+
+        console.log("User logged in:", response.data.user)
+        console.log("User role:", response.data.user.role)
+
+        if (response.data.user.role === "admin") {
+          navigate('/dashboard')
+        } else {
+          // 🔥 FIXED: return user to original page (cart, etc.)
+          navigate(from, { replace: true })
+        }
+
+      } else {
+        setError(response.data.message)
+      }
+
+    } catch (error) {
+      setLoading("")
+      setError(error.response?.data?.message || error.message)
     }
   }
 
@@ -62,19 +64,33 @@ const Signin = () => {
                     <h2>Welcome Back</h2>
                     <p>Sign in to your account</p>
                 </div>
-                
+
                 <form onSubmit={submit} className="signin-form">
                     {loading && <div className="alert alert-info">⏳ {loading}</div>}
                     {error && <div className="alert alert-danger">❌ {error}</div>}
 
                     <div className="form-group">
                         <label>📧 Email</label>
-                        <input type="email" placeholder='Enter your email' className='form-control' value={email}  onChange = {(e)=> setEmail(e.target.value)} required/>
+                        <input
+                          type="email"
+                          placeholder='Enter your email'
+                          className='form-control'
+                          value={email}
+                          onChange={(e)=> setEmail(e.target.value)}
+                          required
+                        />
                     </div>
 
                     <div className="form-group">
                         <label>🔒 Password</label>
-                        <input type="password" placeholder='Enter your password'className='form-control' value={password}  onChange = {(e)=> setPassword(e.target.value)} required/>
+                        <input
+                          type="password"
+                          placeholder='Enter your password'
+                          className='form-control'
+                          value={password}
+                          onChange={(e)=> setPassword(e.target.value)}
+                          required
+                        />
                     </div>
 
                     <button type='submit' className="btn btn-signin">
@@ -82,7 +98,7 @@ const Signin = () => {
                     </button>
 
                     <p className="signin-link">
-                        Don't have an account?<Link to = "/signup"> Sign up</Link>
+                        Don't have an account?<Link to="/signup"> Sign up</Link>
                     </p>
                 </form>
             </div>
@@ -92,5 +108,3 @@ const Signin = () => {
 }
 
 export default Signin
-
-

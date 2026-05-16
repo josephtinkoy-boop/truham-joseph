@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Dashboard from "./Dashboard";
 
-const Admin = () => {
+const Admin = ({ orders }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -133,6 +134,9 @@ const Admin = () => {
         <Link to="/addproduct" className="btn btn-primary">
           ➕ Add New Product
         </Link>
+        <Link to="/dashboard" className="btn btn-info">
+          📊 View Dashboard
+        </Link>
         <button onClick={fetchProducts} className="btn btn-outline-secondary">
           🔄 Refresh
         </button>
@@ -247,6 +251,10 @@ const Admin = () => {
           </table>
         </div>
       )}
+      
+      {/* DASHBOARD SECTION */}
+      <Dashboard orders={orders} />
+      
     </div>
   );
 };
